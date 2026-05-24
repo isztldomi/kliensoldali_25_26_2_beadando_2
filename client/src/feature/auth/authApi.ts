@@ -16,7 +16,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Auth"],
+      invalidatesTags: ["Auth", "User"],
     }),
 
     login: builder.mutation<LoginResponseDto, LoginRequestDto>({
@@ -25,7 +25,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Auth"],
+      invalidatesTags: ["Auth", "User"],
     }),
 
     logout: builder.mutation<void, void>({
@@ -33,12 +33,12 @@ export const authApi = baseApi.injectEndpoints({
         url: authRoutes.logout,
         method: "POST",
       }),
-      invalidatesTags: ["Auth"],
+      invalidatesTags: ["Auth", "User"],
     }),
 
     me: builder.query<MeResponseDto, void>({
       query: () => authRoutes.me,
-      providesTags: ["Auth"],
+      providesTags: ["Auth", "User"],
       transformErrorResponse: (response) => {
         // 401 NEM ERROR STATE legyen UI szinten
         return response;
