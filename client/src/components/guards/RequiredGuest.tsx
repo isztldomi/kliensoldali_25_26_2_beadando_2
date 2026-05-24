@@ -8,9 +8,9 @@ export const RequiredGuest = () => {
     return <div>Loading...</div>;
   }
 
-  if (isAuthenticated) {
-    return <Navigate to="/room" replace />;
-  }
+  // if (isAuthenticated) {
+  //   return <Navigate to="/room" replace />;
+  // }
 
   return <Outlet />;
 };

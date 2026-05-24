@@ -95,7 +95,7 @@ export const Header = () => {
                 <h3>Bejelentkezés</h3>
               </HeaderLink>
 
-              <HeaderLink to="registration">
+              <HeaderLink to="register">
                 <h3>Regisztráció</h3>
               </HeaderLink>
             </>
