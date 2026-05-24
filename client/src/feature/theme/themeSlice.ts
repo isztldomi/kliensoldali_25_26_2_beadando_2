@@ -1,11 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { getThemeFromCookie } from "@/cookie/themeCookie";
-
-type Theme = "dark" | "light";
-
-type ThemeState = {
-  theme: Theme;
-};
+import type { Theme, ThemeState } from "./themeTypes";
 
 const initialState: ThemeState = {
   theme: getThemeFromCookie(),

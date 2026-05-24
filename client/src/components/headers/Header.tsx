@@ -82,7 +82,7 @@ export const Header = () => {
             /* bejelentkezett */
             <>
               <div>
-                <h3>user name</h3>
+                <h3>{user?.name}</h3>
               </div>
               <HeaderLink to="logout">
                 <h3>Kijelentkezés</h3>

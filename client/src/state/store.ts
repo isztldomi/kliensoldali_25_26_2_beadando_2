@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "@/feature/base/baseApi";
 import themeReducer from "@/feature/theme/themeSlice";
+import toastReducer from "@/feature/toast/toastSlice";
 import { setThemeCookie } from "@/cookie/themeCookie";
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     theme: themeReducer,
+    toast: toastReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
