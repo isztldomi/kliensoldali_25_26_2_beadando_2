@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useRegisterMutation } from "@/feature/auth/authApi";
-import type { RegisterRequestDto } from "../authTypes";
+import { useLoginMutation, useRegisterMutation } from "@/feature/auth/authApi";
+import type { LoginRequestDto, RegisterRequestDto } from "../authTypes";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/feature/toast/toastSlice";
@@ -19,6 +19,7 @@ export const RegisterPage = () => {
     useState<RegisterRequestDto>(initialRegisterForm);
 
   const [register, { isLoading }] = useRegisterMutation();
+  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,8 +44,20 @@ export const RegisterPage = () => {
       );
 
       console.log(res);
+      const res2 = await login({
+        email: registerForm.email,
+        password: registerForm.password,
+      } as LoginRequestDto).unwrap();
 
-      navigate("/login"); // vagy "/room", ha auto-login lesz később
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Sikeres bejelentkezés",
+        }),
+      );
+      console.log(res2);
+
+      navigate("/room");
     } catch (error) {
       console.log(error);
 
@@ -97,7 +110,7 @@ export const RegisterPage = () => {
           disabled={isLoading}
           className="p-2 rounded bg-[var(--surface-1)] border border-[var(--border)] hover:bg-[var(--surface-3)] transition-colors disabled:opacity-50"
         >
-          {isLoading ? "Registering..." : "Register"}
+          {isLoading || isLoginLoading ? "Registering..." : "Register"}
         </button>
       </form>
     </div>
