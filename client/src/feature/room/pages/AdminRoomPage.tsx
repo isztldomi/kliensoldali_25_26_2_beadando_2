@@ -162,9 +162,12 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
 
   const handleDeleteTable = async (id: number) => {
     try {
-      await deleteTable({ id }).unwrap();
-
+      if (selectedTableId === id) {
+        setSelectedTableId(null);
+        setSelectedTable(undefined);
+      }
       setRoomTables((prev) => prev.filter((table) => table.id !== id));
+      await deleteTable({ id }).unwrap();
 
       dispatch(
         addToast({
@@ -172,11 +175,6 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
           message: "Sikeres törlés",
         }),
       );
-
-      if (selectedTableId === id) {
-        setSelectedTableId(null);
-        setSelectedTable(undefined);
-      }
     } catch (err) {
       dispatch(
         addToast({
@@ -189,7 +187,7 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
 
   return (
     <div>
-      <div className="flex gap-6">
+      <div className="flex flex-wrap gap-6">
         <div>
           <TableDetailsContainer
             table={selectedTable}

@@ -48,7 +48,7 @@ export const Header = () => {
         ${hidden ? "-translate-y-full" : "translate-y-0"}
       `}
     >
-      <div className="flex w-full items-center justify-between">
+      <div className="flex flex-wrap w-full items-center justify-between">
         {/* egy egység */}
         <div className="flex gap-6 items-center">
           {/* mindig */}
