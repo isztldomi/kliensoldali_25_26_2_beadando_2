@@ -17,12 +17,15 @@ import { getFootprint } from "@/utils/table/tableFootprint";
 import { getTableSize } from "@/utils/table/tableSize";
 import { TableDetailsContainer } from "@/components/containers/TableDetailsContainer";
 import { CreateTableModal } from "@/components/modals/CreateTableModal";
+import { useDispatch } from "react-redux";
+import { addToast } from "@/feature/toast/toastSlice";
 
 interface AdminRoomPageProp {
   tablesData: Table[];
 }
 
 export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
+  const dispatch = useDispatch();
   const [roomTables, setRoomTables] = useState<Table[]>(tablesData);
   const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
   const [modifyTablePosition] = useModifyTablePositionMutation();
@@ -96,47 +99,91 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     id: number,
     data: ModifyTableDetailsRequestDto,
   ) => {
-    await modifyTable({
-      id,
-      data,
-    });
+    try {
+      await modifyTable({ id, data }).unwrap();
 
-    setRoomTables((prev) =>
-      prev.map((table) =>
-        table.id === id
-          ? {
-              ...table,
-              ...data,
-            }
-          : table,
-      ),
-    );
+      setRoomTables((prev) =>
+        prev.map((table) => (table.id === id ? { ...table, ...data } : table)),
+      );
 
-    setSelectedTableId(null);
-    setSelectedTable(undefined);
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Sikeres módosítás",
+        }),
+      );
+
+      setSelectedTableId(null);
+      setSelectedTable(undefined);
+    } catch (err) {
+      dispatch(
+        addToast({
+          type: "error",
+          message: "Sikertelen módosítás",
+        }),
+      );
+    }
   };
 
   const handleCreateTable = async (data: CreateTableRequestDto) => {
-    data.position.x = getFootprint(data.type)!;
-    data.position.y = getFootprint(data.type)!;
-    const created = await createTable(data).unwrap();
+    try {
+      const payload = {
+        ...data,
+        position: {
+          x: getFootprint(data.type)!,
+          y: getFootprint(data.type)!,
+        },
+      };
 
-    setRoomTables((prev) => prev.map((t) => (t.id === -1 ? created : t)));
+      const created = await createTable(payload).unwrap();
 
-    setSelectedTable(created);
-    setSelectedTableId(created.id);
+      setRoomTables((prev) => prev.map((t) => (t.id === -1 ? created : t)));
 
-    setIsCreateModalOpen(false);
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Sikeres létrehozás",
+        }),
+      );
+
+      setSelectedTable(created);
+      setSelectedTableId(created.id);
+
+      setIsCreateModalOpen(false);
+    } catch (err) {
+      dispatch(
+        addToast({
+          type: "error",
+          message: "Sikertelen létrehozás",
+        }),
+      );
+    }
   };
 
   const handleDeleteTable = async (id: number) => {
-    await deleteTable({ id }).unwrap();
+    try {
+      await deleteTable({ id }).unwrap();
 
-    setRoomTables((prev) => prev.filter((table) => table.id !== id));
+      setRoomTables((prev) => prev.filter((table) => table.id !== id));
 
-    if (selectedTableId === id) {
-      setSelectedTableId(null);
-      setSelectedTable(undefined);
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Sikeres törlés",
+        }),
+      );
+
+      if (selectedTableId === id) {
+        setSelectedTableId(null);
+        setSelectedTable(undefined);
+      }
+    } catch (err) {
+      dispatch(
+        addToast({
+          type: "error",
+          message: "Sikertelen törlés",
+        }),
+      );
     }
   };
 
