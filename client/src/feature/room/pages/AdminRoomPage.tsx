@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { RoomContainer } from "@/components/containers/RoomContainer";
 import {
+  useCreateTableMutation,
+  useDeleteTableMutation,
   useModifyTableMutation,
   useModifyTablePositionMutation,
 } from "@/feature/table/tableApi";
@@ -25,7 +27,9 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
   const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
   const [modifyTablePosition] = useModifyTablePositionMutation();
   const [modifyTable] = useModifyTableMutation();
+  const [createTable] = useCreateTableMutation();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [deleteTable] = useDeleteTableMutation();
 
   const [selectedTable, setSelectedTable] = useState<Table | undefined>();
 
@@ -109,26 +113,31 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     );
 
     setSelectedTableId(null);
-    setSelectedTable(null);
+    setSelectedTable(undefined);
   };
 
-  const handleCreateTable = (data: CreateTableRequestDto) => {
-    const newTable: Table = {
-      id: 0, // ideiglenes placeholder
-      ...data,
-    };
+  const handleCreateTable = async (data: CreateTableRequestDto) => {
+    data.position.x = getFootprint(data.type)!;
+    data.position.y = getFootprint(data.type)!;
+    const created = await createTable(data).unwrap();
 
-    setRoomTables((prev) => [...prev, newTable]);
+    setRoomTables((prev) => prev.map((t) => (t.id === -1 ? created : t)));
 
-    // nem állítunk selectedTableId-t
-    setSelectedTable(newTable);
+    setSelectedTable(created);
+    setSelectedTableId(created.id);
 
     setIsCreateModalOpen(false);
+  };
 
-    // később:
-    // const created = await createTable(data)
-    // setSelectedTableId(created.id)
-    // setSelectedTable(created)
+  const handleDeleteTable = async (id: number) => {
+    await deleteTable({ id }).unwrap();
+
+    setRoomTables((prev) => prev.filter((table) => table.id !== id));
+
+    if (selectedTableId === id) {
+      setSelectedTableId(null);
+      setSelectedTable(undefined);
+    }
   };
 
   return (
@@ -139,6 +148,7 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
             table={selectedTable}
             onSubmit={handleModifyTable}
             onCreateClick={() => setIsCreateModalOpen(true)}
+            onDelete={handleDeleteTable}
           />
           <CreateTableModal
             isOpen={isCreateModalOpen}

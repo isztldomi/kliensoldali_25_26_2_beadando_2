@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { CreateTableRequestDto } from "@/feature/table/tableTypes";
+import { COLORS, type Color } from "@/utils/table/tableColors";
 
 interface CreateTableModalProps {
   isOpen: boolean;
@@ -102,17 +103,23 @@ export const CreateTableModal = ({
           <option value="kids">Kids</option>
         </select>
 
-        <input
+        <select
           className="w-full p-2 rounded"
           style={inputStyle}
           value={form.color}
           onChange={(e) =>
             setForm((prev) => ({
               ...prev,
-              color: e.target.value,
+              color: e.target.value as Color,
             }))
           }
-        />
+        >
+          {COLORS.map((color) => (
+            <option key={color} value={color}>
+              {color}
+            </option>
+          ))}
+        </select>
 
         <div className="flex gap-3">
           <button

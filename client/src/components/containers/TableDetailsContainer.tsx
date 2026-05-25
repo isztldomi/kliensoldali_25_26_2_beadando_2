@@ -12,12 +12,14 @@ interface TableDetailsContainerProps {
   table?: Table;
   onSubmit: (id: number, data: ModifyTableDetailsRequestDto) => void;
   onCreateClick: () => void;
+  onDelete: (id: number) => void;
 }
 
 export const TableDetailsContainer = ({
   table,
   onSubmit,
   onCreateClick,
+  onDelete,
 }: TableDetailsContainerProps) => {
   const [form, setForm] = useState<ModifyTableDetailsRequestDto>({
     name: "",
@@ -258,6 +260,12 @@ export const TableDetailsContainer = ({
           }}
         />
       </div>
+      <button
+        onClick={() => table && onDelete(table.id)}
+        className="p-2 rounded bg-red-600"
+      >
+        Delete
+      </button>
     </form>
   );
 };
