@@ -38,3 +38,6 @@ export interface Timeslot {
   endTime: string;
   isAvailable: boolean;
 }
+
+export const TABLE_WIDTH = 100;
+export const TABLE_HEIGHT = 50;

@@ -2,17 +2,17 @@ import type { Table } from "@/feature/table/tableTypes";
 import { useEffect, useState } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { RoomContainer } from "@/components/containers/RoomContainer";
+import { useModifyTablePositionMutation } from "@/feature/table/tableApi";
+import { ROOM_HEIGHT, ROOM_WIDTH } from "@/feature/room/roomTypes";
 
 interface AdminRoomPageProp {
   tablesData: Table[];
 }
 
-const ROOM_WIDTH = 800;
-const ROOM_HEIGHT = 500;
-
 export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
   const [roomTables, setRoomTables] = useState<Table[]>(tablesData);
   const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
+  const [modifyTablePosition] = useModifyTablePositionMutation();
 
   useEffect(() => {
     setRoomTables(tablesData);
@@ -23,27 +23,44 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, delta } = event;
 
+    const table = roomTables.find((t) => t.id === Number(active.id));
+    setSelectedTableId(table!.id);
+
+    if (!table || table.isLocked) return;
+
+    let updatedPosition: { x: number; y: number } | null = null;
+    let updatedId: number | null = null;
+
     setRoomTables((prev) =>
       prev.map((table) => {
-        if (table.id !== Number(active.id)) {
-          return table;
-        }
+        if (table.id !== Number(active.id)) return table;
+
+        updatedId = table.id;
+
+        updatedPosition = {
+          x: Math.max(
+            0,
+            Math.min(ROOM_WIDTH - 100, table.position.x + delta.x),
+          ),
+          y: Math.max(
+            0,
+            Math.min(ROOM_HEIGHT - 60, table.position.y + delta.y),
+          ),
+        };
 
         return {
           ...table,
-          position: {
-            x: Math.max(
-              0,
-              Math.min(ROOM_WIDTH - 100, table.position.x + delta.x),
-            ),
-            y: Math.max(
-              0,
-              Math.min(ROOM_HEIGHT - 60, table.position.y + delta.y),
-            ),
-          },
+          position: updatedPosition,
         };
       }),
     );
+
+    if (updatedId && updatedPosition) {
+      modifyTablePosition({
+        id: updatedId,
+        data: updatedPosition,
+      });
+    }
   };
 
   const handleSelectTable = (id: number) => {
@@ -54,7 +71,6 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     <div>
       <div>AdminRoomPage</div>
       <div className="flex">
-        <div>Selected table details</div>
         <div>
           <RoomContainer
             roomTables={roomTables}
