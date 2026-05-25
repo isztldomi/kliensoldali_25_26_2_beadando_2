@@ -2,6 +2,7 @@ import {
   type ModifyTableDetailsRequestDto,
   type Table,
 } from "@/feature/table/tableTypes";
+import { COLORS, type Color } from "@/utils/table/tableColors";
 import {
   getCategoryHuString,
   getTypeHuString,
@@ -193,17 +194,23 @@ export const TableDetailsContainer = ({
           Szín
         </label>
 
-        <input
+        <select
           className="w-full rounded-lg p-2 outline-none"
           style={inputStyle}
           value={form.color}
           onChange={(e) =>
             setForm((prev) => ({
               ...prev,
-              color: e.target.value,
+              color: e.target.value as Color,
             }))
           }
-        />
+        >
+          {COLORS.map((color) => (
+            <option key={color} value={color}>
+              {color}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* STATUS */}

@@ -17,7 +17,7 @@ export const CreateTableModal = ({
     name: "",
     type: "foosball",
     category: "normal",
-    color: "#22c55e",
+    color: "green",
     status: 10,
     position: {
       x: 100,
