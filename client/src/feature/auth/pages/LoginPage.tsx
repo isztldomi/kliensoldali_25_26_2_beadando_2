@@ -41,7 +41,7 @@ export const LoginPage = () => {
         }),
       );
 
-      navigate("/room"); // 👈 CSAK ITT
+      navigate("/room");
     } catch (error) {
       console.log(error);
       dispatch(

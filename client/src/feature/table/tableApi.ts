@@ -5,8 +5,8 @@ import {
   type Table,
   type Position,
   type Timeslot,
-} from "./tableTypes";
-import { tableRoutes } from "./tableEndpoints";
+} from "@/feature/table/tableTypes";
+import { tableRoutes } from "@/feature/table/tableEndpoints";
 
 export const tableApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
