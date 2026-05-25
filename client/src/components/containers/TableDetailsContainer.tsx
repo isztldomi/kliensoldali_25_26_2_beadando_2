@@ -2,16 +2,22 @@ import {
   type ModifyTableDetailsRequestDto,
   type Table,
 } from "@/feature/table/tableTypes";
+import {
+  getCategoryHuString,
+  getTypeHuString,
+} from "@/utils/table/tableHustring";
 import { useEffect, useState } from "react";
 
 interface TableDetailsContainerProps {
   table?: Table;
   onSubmit: (id: number, data: ModifyTableDetailsRequestDto) => void;
+  onCreateClick: () => void;
 }
 
 export const TableDetailsContainer = ({
   table,
   onSubmit,
+  onCreateClick,
 }: TableDetailsContainerProps) => {
   const [form, setForm] = useState<ModifyTableDetailsRequestDto>({
     name: "",
@@ -38,15 +44,23 @@ export const TableDetailsContainer = ({
   if (!table) {
     return (
       <div
-        className="p-4 rounded-lg border"
+        className="p-5 rounded-xl"
         style={{
           width: "320px",
           background: "var(--surface-2)",
-          borderColor: "var(--border)",
-          color: "var(--text-muted)",
+          border: "1px solid var(--border)",
         }}
       >
-        No table selected
+        <button
+          onClick={onCreateClick}
+          className="w-full p-3 rounded-lg"
+          style={{
+            background: "var(--accent)",
+            color: "var(--text)",
+          }}
+        >
+          + Create table
+        </button>
       </div>
     );
   }
@@ -73,9 +87,24 @@ export const TableDetailsContainer = ({
         color: "var(--text)",
       }}
     >
-      <h2 className="text-lg font-bold" style={{ color: "var(--text)" }}>
-        Edit table
-      </h2>
+      <div className="grid grid-cols-2">
+        <div>
+          <h2 className="text-lg font-bold" style={{ color: "var(--text)" }}>
+            Edit table
+          </h2>
+        </div>
+        {/* BUTTON */}
+        <button
+          type="submit"
+          className="w-full rounded-lg p-3 font-medium transition-opacity hover:opacity-80"
+          style={{
+            background: "var(--accent)",
+            color: "var(--text)",
+          }}
+        >
+          Save changes
+        </button>
+      </div>
 
       {/* NAME */}
       <div>
@@ -105,7 +134,7 @@ export const TableDetailsContainer = ({
           className="block mb-1 text-sm"
           style={{ color: "var(--text-muted)" }}
         >
-          Type
+          Típus
         </label>
 
         <select
@@ -119,9 +148,9 @@ export const TableDetailsContainer = ({
             }))
           }
         >
-          <option value="snooker">Snooker</option>
-          <option value="foosball">Foosball</option>
-          <option value="air-hockey">Air Hockey</option>
+          <option value="snooker">{getTypeHuString("snooker")}</option>
+          <option value="foosball">{getTypeHuString("foosball")}</option>
+          <option value="air-hockey">{getTypeHuString("air-hockey")}</option>
         </select>
       </div>
 
@@ -131,7 +160,7 @@ export const TableDetailsContainer = ({
           className="block mb-1 text-sm"
           style={{ color: "var(--text-muted)" }}
         >
-          Category
+          Kategória
         </label>
 
         <select
@@ -145,9 +174,11 @@ export const TableDetailsContainer = ({
             }))
           }
         >
-          <option value="competition">Competition</option>
-          <option value="normal">Normal</option>
-          <option value="kids">Kids</option>
+          <option value="competition">
+            {getCategoryHuString("competition")}
+          </option>
+          <option value="normal">{getCategoryHuString("normal")}</option>
+          <option value="kids">{getCategoryHuString("kids")}</option>
         </select>
       </div>
 
@@ -157,7 +188,7 @@ export const TableDetailsContainer = ({
           className="block mb-1 text-sm"
           style={{ color: "var(--text-muted)" }}
         >
-          Color
+          Szín
         </label>
 
         <input
@@ -179,7 +210,7 @@ export const TableDetailsContainer = ({
           className="block mb-2 text-sm"
           style={{ color: "var(--text-muted)" }}
         >
-          Status ({form.status}/10)
+          Állapot ({form.status}/10)
         </label>
 
         <input
@@ -210,20 +241,23 @@ export const TableDetailsContainer = ({
           }
         />
 
-        <span style={{ color: "var(--text)" }}>Locked</span>
+        <span style={{ color: "var(--text)" }}>Rögzített</span>
       </label>
+      <div>
+        <label className="block mb-1 text-[var(--text-muted)]">Pozíció</label>
 
-      {/* BUTTON */}
-      <button
-        type="submit"
-        className="w-full rounded-lg p-3 font-medium transition-opacity hover:opacity-80"
-        style={{
-          background: "var(--accent)",
-          color: "var(--text)",
-        }}
-      >
-        Save changes
-      </button>
+        <input
+          disabled
+          value={`X: ${Math.round(table.position.x)} px | Y: ${Math.round(table.position.y)} px`}
+          className="w-full rounded border p-2"
+          style={{
+            background: "var(--surface-1)",
+            borderColor: "var(--border)",
+            color: "var(--text-muted)",
+            opacity: 0.8,
+          }}
+        />
+      </div>
     </form>
   );
 };

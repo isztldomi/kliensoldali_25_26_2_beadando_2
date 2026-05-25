@@ -1,4 +1,5 @@
 import type {
+  CreateTableRequestDto,
   ModifyTableDetailsRequestDto,
   Table,
 } from "@/feature/table/tableTypes";
@@ -13,6 +14,7 @@ import { ROOM_HEIGHT, ROOM_WIDTH } from "@/feature/room/roomTypes";
 import { getFootprint } from "@/utils/table/tableFootprint";
 import { getTableSize } from "@/utils/table/tableSize";
 import { TableDetailsContainer } from "@/components/containers/TableDetailsContainer";
+import { CreateTableModal } from "@/components/modals/CreateTableModal";
 
 interface AdminRoomPageProp {
   tablesData: Table[];
@@ -23,9 +25,9 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
   const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
   const [modifyTablePosition] = useModifyTablePositionMutation();
   const [modifyTable] = useModifyTableMutation();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const selectedTable =
-    roomTables.find((t) => t.id === selectedTableId) ?? undefined;
+  const [selectedTable, setSelectedTable] = useState<Table | undefined>();
 
   useEffect(() => {
     setRoomTables(tablesData);
@@ -37,57 +39,53 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     const { active, delta } = event;
 
     const table = roomTables.find((t) => t.id === Number(active.id));
-    setSelectedTableId(table!.id);
+
+    if (table) {
+      setSelectedTable(table);
+      setSelectedTableId(table.id);
+    }
 
     if (!table || table.isLocked) return;
 
-    let updatedPosition: { x: number; y: number } | null = null;
-    let updatedId: number | null = null;
+    const updatedPosition = {
+      x: Math.max(
+        getFootprint(table.type)!,
+        Math.min(
+          ROOM_WIDTH -
+            getTableSize(table.type)!.width! -
+            getFootprint(table.type)!,
+          table.position.x + delta.x,
+        ),
+      ),
+      y: Math.max(
+        getFootprint(table.type)!,
+        Math.min(
+          ROOM_HEIGHT -
+            getTableSize(table.type)!.height! -
+            getFootprint(table.type)!,
+          table.position.y + delta.y,
+        ),
+      ),
+    };
 
     setRoomTables((prev) =>
-      prev.map((table) => {
-        if (table.id !== Number(active.id)) return table;
-
-        updatedId = table.id;
-
-        updatedPosition = {
-          x: Math.max(
-            0 + getFootprint(table.type)!,
-            Math.min(
-              ROOM_WIDTH -
-                getTableSize(table.type)!.width! -
-                getFootprint(table.type)!,
-              table.position.x + delta.x,
-            ),
-          ),
-          y: Math.max(
-            0 + getFootprint(table.type)!,
-            Math.min(
-              ROOM_HEIGHT -
-                getTableSize(table.type)!.height! -
-                getFootprint(table.type)!,
-              table.position.y + delta.y,
-            ),
-          ),
-        };
-
-        return {
-          ...table,
-          position: updatedPosition,
-        };
-      }),
+      prev.map((t) =>
+        t.id === table.id ? { ...t, position: updatedPosition } : t,
+      ),
     );
 
-    if (updatedId && updatedPosition) {
-      modifyTablePosition({
-        id: updatedId,
-        data: updatedPosition,
-      });
-    }
+    modifyTablePosition({
+      id: table.id,
+      data: updatedPosition,
+    });
   };
 
   const handleSelectTable = (id: number) => {
     setSelectedTableId(id);
+
+    const table = roomTables.find((t) => t.id === id);
+
+    setSelectedTable(table);
   };
 
   const handleModifyTable = async (
@@ -111,16 +109,41 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     );
 
     setSelectedTableId(null);
+    setSelectedTable(null);
+  };
+
+  const handleCreateTable = (data: CreateTableRequestDto) => {
+    const newTable: Table = {
+      id: 0, // ideiglenes placeholder
+      ...data,
+    };
+
+    setRoomTables((prev) => [...prev, newTable]);
+
+    // nem állítunk selectedTableId-t
+    setSelectedTable(newTable);
+
+    setIsCreateModalOpen(false);
+
+    // később:
+    // const created = await createTable(data)
+    // setSelectedTableId(created.id)
+    // setSelectedTable(created)
   };
 
   return (
     <div>
-      <div>AdminRoomPage</div>
       <div className="flex gap-6">
         <div>
           <TableDetailsContainer
             table={selectedTable}
             onSubmit={handleModifyTable}
+            onCreateClick={() => setIsCreateModalOpen(true)}
+          />
+          <CreateTableModal
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            onSubmit={handleCreateTable}
           />
         </div>
         <div>
