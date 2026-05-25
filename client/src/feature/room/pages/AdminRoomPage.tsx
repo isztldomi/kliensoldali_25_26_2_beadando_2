@@ -1,9 +1,18 @@
-import type { Table } from "@/feature/table/tableTypes";
+import type {
+  ModifyTableDetailsRequestDto,
+  Table,
+} from "@/feature/table/tableTypes";
 import { useEffect, useState } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { RoomContainer } from "@/components/containers/RoomContainer";
-import { useModifyTablePositionMutation } from "@/feature/table/tableApi";
+import {
+  useModifyTableMutation,
+  useModifyTablePositionMutation,
+} from "@/feature/table/tableApi";
 import { ROOM_HEIGHT, ROOM_WIDTH } from "@/feature/room/roomTypes";
+import { getFootprint } from "@/utils/table/tableFootprint";
+import { getTableSize } from "@/utils/table/tableSize";
+import { TableDetailsContainer } from "@/components/containers/TableDetailsContainer";
 
 interface AdminRoomPageProp {
   tablesData: Table[];
@@ -13,6 +22,10 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
   const [roomTables, setRoomTables] = useState<Table[]>(tablesData);
   const [selectedTableId, setSelectedTableId] = useState<number | null>(null);
   const [modifyTablePosition] = useModifyTablePositionMutation();
+  const [modifyTable] = useModifyTableMutation();
+
+  const selectedTable =
+    roomTables.find((t) => t.id === selectedTableId) ?? undefined;
 
   useEffect(() => {
     setRoomTables(tablesData);
@@ -39,12 +52,22 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
 
         updatedPosition = {
           x: Math.max(
-            0,
-            Math.min(ROOM_WIDTH - 100, table.position.x + delta.x),
+            0 + getFootprint(table.type)!,
+            Math.min(
+              ROOM_WIDTH -
+                getTableSize(table.type)!.width! -
+                getFootprint(table.type)!,
+              table.position.x + delta.x,
+            ),
           ),
           y: Math.max(
-            0,
-            Math.min(ROOM_HEIGHT - 60, table.position.y + delta.y),
+            0 + getFootprint(table.type)!,
+            Math.min(
+              ROOM_HEIGHT -
+                getTableSize(table.type)!.height! -
+                getFootprint(table.type)!,
+              table.position.y + delta.y,
+            ),
           ),
         };
 
@@ -67,10 +90,39 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     setSelectedTableId(id);
   };
 
+  const handleModifyTable = async (
+    id: number,
+    data: ModifyTableDetailsRequestDto,
+  ) => {
+    await modifyTable({
+      id,
+      data,
+    });
+
+    setRoomTables((prev) =>
+      prev.map((table) =>
+        table.id === id
+          ? {
+              ...table,
+              ...data,
+            }
+          : table,
+      ),
+    );
+
+    setSelectedTableId(null);
+  };
+
   return (
     <div>
       <div>AdminRoomPage</div>
-      <div className="flex">
+      <div className="flex gap-6">
+        <div>
+          <TableDetailsContainer
+            table={selectedTable}
+            onSubmit={handleModifyTable}
+          />
+        </div>
         <div>
           <RoomContainer
             roomTables={roomTables}

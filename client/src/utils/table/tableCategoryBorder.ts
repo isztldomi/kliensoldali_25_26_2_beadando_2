@@ -7,6 +7,6 @@ export const getCategoryBorder = (category: Table["category"]) => {
     case "normal":
       return "2px solid var(--border)";
     case "kids":
-      return "2px dashed var(--accent)";
+      return "1px solid var(--accent)";
   }
 };

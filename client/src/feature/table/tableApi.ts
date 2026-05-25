@@ -31,7 +31,6 @@ export const tableApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Tables"],
     }),
     deleteTable: builder.mutation<void, { id: number }>({
       query: ({ id }) => ({
@@ -49,7 +48,6 @@ export const tableApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Tables"],
     }),
     getTableTimesLots: builder.query<Timeslot[], { id: number; date?: string }>(
       {
