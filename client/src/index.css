@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* =========================
-   DESIGN TOKENS (THEME)
+   DESIGN TOKENS
 ========================= */
 
 @layer base {
@@ -44,7 +44,7 @@
 }
 
 /* =========================
-   LIGHT THEME (későbbre)
+   LIGHT THEME
 ========================= */
 
 .light {

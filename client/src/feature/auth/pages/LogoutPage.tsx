@@ -25,7 +25,6 @@ export const LogoutPage = () => {
       } catch (err) {
         console.error("logout failed", err);
 
-        // fallback
         navigate("/login", { replace: true });
       }
     };

@@ -73,8 +73,6 @@ export const TableTimeslotsContainer = ({
           border: "1px solid var(--border)",
         }}
       >
-        {/* HEADER */}
-
         <div className="mb-4">
           <h2
             className="font-bold mb-3"
@@ -131,8 +129,6 @@ export const TableTimeslotsContainer = ({
           </div>
         </div>
 
-        {/* LOADING */}
-
         {isLoading && (
           <div
             style={{
@@ -142,8 +138,6 @@ export const TableTimeslotsContainer = ({
             Betöltés...
           </div>
         )}
-
-        {/* TIMESLOTS */}
 
         {!isLoading && (
           <div className="space-y-2 max-h-[700px] overflow-y-auto">

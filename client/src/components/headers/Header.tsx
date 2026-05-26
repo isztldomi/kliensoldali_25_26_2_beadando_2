@@ -49,25 +49,20 @@ export const Header = () => {
       `}
     >
       <div className="flex flex-wrap w-full items-center justify-between">
-        {/* egy egység */}
         <div className="flex gap-6 items-center">
-          {/* mindig */}
           <HeaderLink to="">
             <h1>Roomlie</h1>
           </HeaderLink>
-          {/* mindig */}
           <HeaderLink to="room">
             <h3>Terem</h3>
           </HeaderLink>
           {isAuthenticated && (
             <>
               {isAdmin ? (
-                /* bejelentkezett -> admin */
                 <HeaderLink to="reservation/all">
                   <h3>Beérkezett Foglalások</h3>
                 </HeaderLink>
               ) : (
-                /* bejelentkezett -> felhasználó */
                 <HeaderLink to="reservation/me">
                   <h3>Foglalásaim</h3>
                 </HeaderLink>
@@ -76,10 +71,8 @@ export const Header = () => {
           )}
         </div>
 
-        {/* egy egység */}
         <div className="flex gap-6 items-center">
           {isAuthenticated ? (
-            /* bejelentkezett */
             <>
               <div>
                 <h3>{user?.name}</h3>
@@ -89,7 +82,6 @@ export const Header = () => {
               </HeaderLink>
             </>
           ) : (
-            /* Guest */
             <>
               <HeaderLink to="login">
                 <h3>Bejelentkezés</h3>
@@ -100,7 +92,6 @@ export const Header = () => {
               </HeaderLink>
             </>
           )}
-          {/* mindig */}
           <ThemeButton />
         </div>
       </div>

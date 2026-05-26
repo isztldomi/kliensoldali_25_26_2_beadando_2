@@ -5,14 +5,11 @@ import { AdminRoomPage } from "./AdminRoomPage";
 import { UserRoomPage } from "./UserRoomPage";
 
 export const RoomPage = () => {
-  /* user */
   const { user, isAuthenticated, isLoading } = useAuthBootstrap();
   const isAdmin = isAuthenticated && user?.role === "admin";
 
-  /* tables */
   const { data: tablesData, isLoading: isTablesLoading } = useGetTablesQuery();
 
-  /* loadings */
   if (isLoading || isTablesLoading || tablesData == null) {
     return (
       <header className="...">

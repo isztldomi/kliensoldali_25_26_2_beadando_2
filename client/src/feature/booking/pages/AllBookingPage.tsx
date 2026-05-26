@@ -83,7 +83,6 @@ export const AllBookingPage = () => {
                 border: "1px solid var(--border)",
               }}
             >
-              {/* HEADER */}
               <div className="flex justify-between">
                 <div>
                   <div className="font-bold">{b.tableName}</div>
@@ -109,7 +108,6 @@ export const AllBookingPage = () => {
                 </div>
               </div>
 
-              {/* USER INFO */}
               <div className="mt-2 text-sm">
                 <div className="flex gap-3">
                   <User /> {b.name}
@@ -134,7 +132,6 @@ export const AllBookingPage = () => {
                 )}
               </div>
 
-              {/* ACTIONS */}
               {b.status === BookingStatus.Pending && (
                 <div className="flex gap-2 mt-3">
                   <button

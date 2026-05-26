@@ -17,8 +17,6 @@ export const UserRoomPage = ({ tablesData }: UserRoomPageProp) => {
     setRoomTables(tablesData);
   }, [tablesData]);
 
-  /* drag and drop */
-
   const handleSelectTable = (id: number) => {
     setSelectedTableId(id);
 

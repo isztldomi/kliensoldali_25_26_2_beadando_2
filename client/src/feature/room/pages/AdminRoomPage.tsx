@@ -40,8 +40,6 @@ export const AdminRoomPage = ({ tablesData }: AdminRoomPageProp) => {
     setRoomTables(tablesData);
   }, [tablesData]);
 
-  /* drag and drop */
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, delta } = event;
 
