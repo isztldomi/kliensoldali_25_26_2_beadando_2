@@ -27,8 +27,9 @@ export const bookingApi = baseApi.injectEndpoints({
       query: ({ id, status }) => ({
         url: bookingRoutes.statusById(id),
         method: "PATCH",
-        status,
+        body: { status },
       }),
+      invalidatesTags: ["Bookings"],
     }),
   }),
   overrideExisting: false,

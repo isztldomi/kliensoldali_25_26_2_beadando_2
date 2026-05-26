@@ -1,14 +1,26 @@
+import { RequiredAdmin } from "@/components/guards/RequireAdmin";
+import { RequiredAuth } from "@/components/guards/RequireAuth";
+import { AllBookingPage } from "@/feature/booking/pages/AllBookingPage";
+import { MeBookingPage } from "@/feature/booking/pages/MeBookingPage";
 import type { RouteObject } from "react-router-dom";
-// import { RequireAuth } from "@/components/guards/RequireAuth";
-// import { MyQuizzesPage } from "@/pages/MyQuizzesPage";
 
 export const protectedRoutes: RouteObject[] = [
-  //{
-  //  path: "/my-quizzes",
-  //  element: (
-  //    <RequireAuth>
-  //      <MyQuizzesPage />
-  //    </RequireAuth>
-  //  ),
-  //},
+  {
+    element: <RequiredAuth />,
+    children: [
+      {
+        path: "/reservation/me",
+        element: <MeBookingPage />,
+      },
+    ],
+  },
+  {
+    element: <RequiredAdmin />,
+    children: [
+      {
+        path: "/reservation/all",
+        element: <AllBookingPage />,
+      },
+    ],
+  },
 ];
