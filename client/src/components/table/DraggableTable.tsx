@@ -71,7 +71,6 @@ export const DraggableTable = ({
         willChange: "transform",
       }}
     >
-      {/* FOOTPRINT */}
       <div
         className="absolute rounded-md pointer-events-none"
         style={{
@@ -88,7 +87,6 @@ export const DraggableTable = ({
         }}
       />
 
-      {/* TABLE */}
       <div
         {...listeners}
         {...attributes}

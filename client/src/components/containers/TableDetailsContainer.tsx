@@ -96,7 +96,6 @@ export const TableDetailsContainer = ({
             Edit table
           </h2>
         </div>
-        {/* BUTTON */}
         <button
           type="submit"
           className="w-full rounded-lg p-3 font-medium transition-opacity hover:opacity-80"
@@ -109,7 +108,6 @@ export const TableDetailsContainer = ({
         </button>
       </div>
 
-      {/* NAME */}
       <div>
         <label
           className="block mb-1 text-sm"
@@ -131,7 +129,6 @@ export const TableDetailsContainer = ({
         />
       </div>
 
-      {/* TYPE */}
       <div>
         <label
           className="block mb-1 text-sm"
@@ -157,7 +154,6 @@ export const TableDetailsContainer = ({
         </select>
       </div>
 
-      {/* CATEGORY */}
       <div>
         <label
           className="block mb-1 text-sm"
@@ -185,7 +181,6 @@ export const TableDetailsContainer = ({
         </select>
       </div>
 
-      {/* COLOR */}
       <div>
         <label
           className="block mb-1 text-sm"
@@ -213,7 +208,6 @@ export const TableDetailsContainer = ({
         </select>
       </div>
 
-      {/* STATUS */}
       <div>
         <label
           className="block mb-2 text-sm"
@@ -237,7 +231,6 @@ export const TableDetailsContainer = ({
         />
       </div>
 
-      {/* LOCK */}
       <label className="flex items-center gap-3 cursor-pointer">
         <input
           type="checkbox"

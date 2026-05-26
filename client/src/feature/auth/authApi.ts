@@ -40,7 +40,6 @@ export const authApi = baseApi.injectEndpoints({
       query: () => authRoutes.me,
       providesTags: ["Auth", "User"],
       transformErrorResponse: (response) => {
-        // 401 NEM ERROR STATE legyen UI szinten
         return response;
       },
     }),

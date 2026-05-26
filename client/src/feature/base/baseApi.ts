@@ -7,7 +7,7 @@ export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL_HOST}${API_PREFIX}`,
-    credentials: "include", // ha van cookie-s auth
+    credentials: "include",
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
       return headers;

@@ -19,9 +19,6 @@ export const ToastContainer = () => {
 
   const timers = useRef<Record<string, TimerState>>({});
 
-  // =========================
-  // START / RESUME TIMER
-  // =========================
   const startTimer = (id: string) => {
     const now = Date.now();
 
@@ -59,9 +56,6 @@ export const ToastContainer = () => {
     timer.rafId = requestAnimationFrame(tick);
   };
 
-  // =========================
-  // PAUSE TIMER
-  // =========================
   const pauseTimer = (id: string) => {
     const timer = timers.current[id];
     if (!timer) return;
@@ -77,9 +71,6 @@ export const ToastContainer = () => {
     timer.remaining = Math.max(TOAST_DURATION - elapsed, 0);
   };
 
-  // =========================
-  // INIT NEW TOASTS
-  // =========================
   useEffect(() => {
     toasts.forEach((t) => {
       if (!timers.current[t.id]) {
@@ -88,9 +79,6 @@ export const ToastContainer = () => {
     });
   }, [toasts]);
 
-  // =========================
-  // RENDER
-  // =========================
   return (
     <div className="fixed top-4 right-4 flex flex-col gap-3 z-50">
       {toasts.map((toast) => (
@@ -111,7 +99,6 @@ export const ToastContainer = () => {
             }
           `}
         >
-          {/* CLOSE BUTTON */}
           <button
             onClick={() => {
               cancelAnimationFrame(timers.current[toast.id]?.rafId!);
@@ -123,10 +110,8 @@ export const ToastContainer = () => {
             <X size={30} />
           </button>
 
-          {/* TEXT */}
           <div className="relative z-10 pr-4">{toast.message}</div>
 
-          {/* PROGRESS BAR */}
           <div className="absolute bottom-0 left-0 h-1 w-full bg-[var(--toast-progress-track)]">
             <div
               className="h-full bg-[var(--toast-progress)] transition-all duration-75"
