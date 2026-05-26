@@ -1,3 +1,11 @@
+export const BookingStatus = {
+  Pending: "pending",
+  Accepted: "accepted",
+  Declined: "declined",
+} as const;
+
+export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus];
+
 export interface Booking {
   id: number;
   tableId: number;
@@ -11,7 +19,7 @@ export interface Booking {
   phone: string;
   headcount: number;
   notes: string;
-  status: string;
+  status: BookingStatus;
 }
 
 export interface CreateBookingRequestDto {

@@ -19,9 +19,9 @@ A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az e
 - [x] Redux használata (kötelező)
 - [ ] README.md fájl kitöltve
 
-- [ ] Terem (4pt)
+- [x] Terem (4pt)
   - [x] az asztalok megfelelően megjelennek a teremben az API-ból lekérve (2pt)
-  - [ ] Kiválasztott asztal esetén tudunk lépkedni a napok között, látjuk a dátumokat, az elérhető/foglalt időpontokat (2pt)
+  - [x] Kiválasztott asztal esetén tudunk lépkedni a napok között, látjuk a dátumokat, az elérhető/foglalt időpontokat (2pt)
 
 - [x] Felhasználókezelés (3pt)
   - [x] Működik a regisztráció (1pt)
@@ -33,9 +33,9 @@ A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az e
   - [x] Navigációs sáv tartalma megfelelően változik a felhasználó 'role' attribútuma alapján, adminként megjelennek a releváns opciók (1pt)
 
 - [ ] Foglalás (7pt)
-  - [ ] Foglalás esetén a szerverről ellenőrizzük, hogy az adott hely még elérhető-e (2pt)
-  - [ ] A felhasználó által lefoglalt asztalok az adatbázisban mentésre kerülnek a REST API segítségével (2pt)
-  - [ ] A felhasználó visszajelzést kap a sikeres/sikertelen foglalásról (1pt)
+  - [x] Foglalás esetén a szerverről ellenőrizzük, hogy az adott hely még elérhető-e (2pt)
+  - [x] A felhasználó által lefoglalt asztalok az adatbázisban mentésre kerülnek a REST API segítségével (2pt)
+  - [x] A felhasználó visszajelzést kap a sikeres/sikertelen foglalásról (1pt)
   - [ ] A foglalásokat részletező oldalon a felhaszáló foglalásai és annak információi listázásra kerülnek (2pt)
 
 - [ ] Admin funkciók (11pt)

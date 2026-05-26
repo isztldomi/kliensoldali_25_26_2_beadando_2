@@ -25,7 +25,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ["Auth", "User", "Tables", "Timeslot", "Bookings"],
     }),
 
     logout: builder.mutation<void, void>({
@@ -33,7 +33,7 @@ export const authApi = baseApi.injectEndpoints({
         url: authRoutes.logout,
         method: "POST",
       }),
-      invalidatesTags: ["Auth", "User"],
+      invalidatesTags: ["Auth", "User", "Tables", "Timeslot", "Bookings"],
     }),
 
     me: builder.query<MeResponseDto, void>({
