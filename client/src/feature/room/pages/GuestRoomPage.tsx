@@ -8,7 +8,6 @@ interface GuestRoomPageProp {
 export const GuestRoomPage = ({ tablesData }: GuestRoomPageProp) => {
   return (
     <div>
-      <div>GuestRoomPage</div>
       <div className="flex">
         <div>
           <RoomContainer roomTables={tablesData} />
